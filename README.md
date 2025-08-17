@@ -73,7 +73,6 @@ Players have limited bullets and lives, while the Base allows **reload** and **r
    - HC-05 GND → GND  
    - HC-05 TX → Arduino D5 (RX of SoftwareSerial)  
    - HC-05 RX → Arduino D6 (TX of SoftwareSerial)  
-   *(⚠️ usa divisor de tensão no RX do HC-05 se necessário, pois ele trabalha a 3.3V)*  
 
 2. **Pairing**  
    - Default name: `HC-05`  
