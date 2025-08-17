@@ -1,4 +1,8 @@
 # Arduino Laser Tag — Base + Gun/Vest (TFT + Bluetooth)
+![License](https://img.shields.io/badge/license-MIT-green)
+![Platform](https://img.shields.io/badge/platform-Arduino-blue)
+![Language](https://img.shields.io/badge/language-C++-lightgrey)
+
 DIY Arduino Laser Tag system with two modules: **Base Station** and **Gun/Vest**.  
 The project uses **TFT displays**, **Bluetooth HC-05**, **piezo speaker**, and **IR/laser emitter** to simulate a simple tag game.  
 Players have limited bullets and lives, while the Base allows **reload** and **respawn**.
@@ -105,6 +109,25 @@ Players have limited bullets and lives, while the Base allows **reload** and **r
 - Recommended to add photos of wiring and setup for clarity.  
 
 ---
+
+## 🛠️ Troubleshooting & Notes
+
+- **Button bouncing** → sometimes button presses register multiple times.  
+  🔧 Fix: use `INPUT_PULLUP` and implement a simple debounce (e.g. with `millis()`).
+
+- **IR detection too sensitive** → analogRead on A4 may trigger noise.  
+  🔧 Fix: add a small capacitor as a filter or handle noise in software (ignore very short pulses).
+
+- **Delays block execution** → current code uses `delay()` which freezes other actions.  
+  🔧 Improvement: replace with non-blocking timing using `millis()`.
+
+- **HC-05 pairing issues** → ensure baud rate is `9600`, default PIN is `1234` or `0000`.  
+  If connection fails, reset module or check RX/TX wiring.
+
+- **Large files on GitHub** → avoid committing generated `.hex` or `build/` folders (already covered by `.gitignore`).
+
+---
+
 
 ## 📜 License
 MIT License – free to use, learn, and adapt.
