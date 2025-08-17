@@ -3,6 +3,7 @@
 #include <SPI.h>
 #include <SoftwareSerial.h>
 
+// TFT display pins
 #define cs 10
 #define dc 9
 #define rst 8
@@ -10,189 +11,190 @@
 TFT TFTscreen = TFT(cs, dc, rst);        
 SoftwareSerial HC05(5, 6);
 
-byte piezoPin = 7;      // -------> Piezzo (7)
-byte buttonPin = 3;     // -------> Botão de disparo (3)
-int balas;
-int vidas;
-int hit;
-int over;
-int stat;
-
+// Pin definitions
+byte piezoPin = 7;      // Piezo speaker
+byte buttonPin = 3;     // Trigger button
+int balas;              // Bullets
+int vidas;              // Lives
+int hit;                // Hit flag
+int over;               // Game over flag
+int stat;               // Status (Bluetooth commands)
 
 void setup() {
+  // Hardware setup
+  pinMode(buttonPin, INPUT);   // trigger button
+  pinMode(2, OUTPUT);          // IR/Laser emitter
+  pinMode(piezoPin, OUTPUT);   // piezo speaker
+  pinMode(A4, INPUT);          // IR sensor
 
-// ----------------------------------------------------------------------------------------------------------------
+  // Initial values
+  balas = 20;
+  vidas = 3;
+  hit = 0;
+  stat = 0;
+  over = 0;
 
-pinMode(buttonPin,INPUT);      // -------> Botão de disparo (3)
-pinMode(2, OUTPUT);           // -------> Laser 
-pinMode(piezoPin,OUTPUT);  
-pinMode(A4,INPUT);            //--------> Detetor
-
-// ----------------------------------------------------------------------------------------------------------------
-balas = 20;
-vidas = 3;
-hit = 0;
-stat = 0;
-over =0;
-// ----------------------------------------------------------------------------------------------------------------
-TFTscreen.begin();
-TFTscreen.background(255,255,255);
+  // Display setup
+  TFTscreen.begin();
+  TFTscreen.background(255,255,255);
 
   TFTscreen.setCursor(15,90);
   TFTscreen.setTextSize(2);
   TFTscreen.setTextColor(0x0000);
   TFTscreen.print("Vidas - III");
 
-  
   TFTscreen.setCursor(2,20);
   TFTscreen.setTextSize(2);
   TFTscreen.setTextColor(0x0000);
   TFTscreen.print("Balas - 20/20");
 
-
-
-Serial.begin(9600);
-HC05.begin(9600);
+  // Serial + Bluetooth
+  Serial.begin(9600);
+  HC05.begin(9600);
 }
 
 void loop() {
   Serial.println(analogRead(A4));
-  if(digitalRead(buttonPin)==HIGH && balas>0){             //------->Disparar
 
-     TFTscreen.setCursor(98,20);
-  TFTscreen.setTextSize(2);
-  TFTscreen.setTextColor(0xFFFF);
-  TFTscreen.print(balas);
-
-   balas--;
+  // Shooting
+  if(digitalRead(buttonPin)==HIGH && balas>0){     
     TFTscreen.setCursor(98,20);
-  TFTscreen.setTextSize(2);
-  TFTscreen.setTextColor(0x0000);
-  TFTscreen.print(balas);
+    TFTscreen.setTextSize(2);
+    TFTscreen.setTextColor(0xFFFF);
+    TFTscreen.print(balas);
+
+    balas--;
+    TFTscreen.setCursor(98,20);
+    TFTscreen.setTextSize(2);
+    TFTscreen.setTextColor(0x0000);
+    TFTscreen.print(balas);
     
     digitalWrite(2,HIGH);
-    //meter as cenas dos infravermelhos
-    spaceGun(600);
+    spaceGun(600); // play shot sound
     digitalWrite(2,LOW);
+
     while(digitalRead(buttonPin)==1){
       if(analogRead(A4)==0){
         hit=1;
         break;
       }
+    }
   }
-  }
-  else if(balas==0){                                        //------->Sem Balas
+
+  // Out of bullets → wait for reload
+  else if(balas==0){                                
     while(stat != 1){
        HC05.listen();
        if (HC05.available()>0) { 
-       HC05.listen();
-       stat = HC05.read();
+         HC05.listen();
+         stat = HC05.read();
        }
-      if(analogRead(A4)==0){
-        hit=1;
-        break;
-      }
+       if(analogRead(A4)==0){
+         hit=1;
+         break;
+       }
     }
     stat=0;
-  TFTscreen.setCursor(98,20);
-  TFTscreen.setTextSize(2);
-  TFTscreen.setTextColor(0xFFFF);
-  TFTscreen.print(balas);
-  balas=20;
-  TFTscreen.setCursor(98,20);
-  TFTscreen.setTextSize(2);
-  TFTscreen.setTextColor(0x0000);
-  TFTscreen.print(balas);
-  }
-  
- if(analogRead(A4)==0 || hit==1){                                    //------->Ser atingido
-  vidas--;
-  //-----
-    if(vidas==0){                                            //------->Perder o jogo
-    while(1){
-    //meter uma cena a dizer end game
-    if(over==0){
-      TFTscreen.background(255 ,0,0);
-      over=1;
-    }
-    TFTscreen.setCursor(30,60);
+    TFTscreen.setCursor(98,20);
     TFTscreen.setTextSize(2);
     TFTscreen.setTextColor(0xFFFF);
-    TFTscreen.print("GAME OVER");
-    }
+    TFTscreen.print(balas);
+    balas=20;
+    TFTscreen.setCursor(98,20);
+    TFTscreen.setTextSize(2);
+    TFTscreen.setTextColor(0x0000);
+    TFTscreen.print(balas);
   }
-  while(stat != 2){                                                   //------->Ciclo até ser revivido  *
-    TFTscreen.background(255 ,0,0);
-    TFTscreen.setCursor(27,55);
-    TFTscreen.setTextSize(3);
-    TFTscreen.setTextColor(0x0000);
-    TFTscreen.print("Wasted");
-    HC05.listen();
-    if (HC05.available()>0) { 
-    HC05.listen();
-    stat = HC05.read();
+  
+  // Being hit
+  if(analogRead(A4)==0 || hit==1){      
+    vidas--;
+
+    // Game over
+    if(vidas==0){                        
+      while(1){
+        if(over==0){
+          TFTscreen.background(255 ,0,0);
+          over=1;
+        }
+        TFTscreen.setCursor(30,60);
+        TFTscreen.setTextSize(2);
+        TFTscreen.setTextColor(0xFFFF);
+        TFTscreen.print("GAME OVER");
+      }
     }
-    delay(700);
-    TFTscreen.background(255,255,255);
-    TFTscreen.setCursor(27,55);
-    TFTscreen.setTextSize(3);
-    TFTscreen.setTextColor(0x0000);
-    TFTscreen.print("Wasted");
-    if(stat != 2){
+
+    // Wait until respawn command received
+    while(stat != 2){                       
+      TFTscreen.background(255 ,0,0);
+      TFTscreen.setCursor(27,55);
+      TFTscreen.setTextSize(3);
+      TFTscreen.setTextColor(0x0000);
+      TFTscreen.print("Wasted");
+
       HC05.listen();
       if (HC05.available()>0) { 
-      HC05.listen();
-      stat = HC05.read();
-    }
-    }
-    delay(700);
-    //meter uma cena a dizer q tas morto até ser revivido
- 
-  }
-  stat=0;
-  //-----
-  if(vidas==2){                                                //------->Ficar com duas vidas
-  TFTscreen.background(255,255,255);
-
-  TFTscreen.setCursor(2,20);
-  TFTscreen.setTextSize(2);
-  TFTscreen.setTextColor(0x0000);
-  TFTscreen.print("Balas - 20/20");
-  
-  TFTscreen.setCursor(15,90);
-  TFTscreen.setTextSize(2);
-  TFTscreen.setTextColor(0x0000);
-  TFTscreen.print("Vidas - II");
-  }
-  else if(vidas==1){                                           //------->Ficar com três vidas
-  TFTscreen.background(255,255,255);
-    
-  TFTscreen.setCursor(2,20);
-  TFTscreen.setTextSize(2);
-  TFTscreen.setTextColor(0x0000);
-  TFTscreen.print("Balas - 20/20");
-
-
-  TFTscreen.setCursor(15,90);
-  TFTscreen.setTextSize(2);
-  TFTscreen.setTextColor(0x0000);
-  TFTscreen.print("Vidas - I");
-  }
-  hit=0;
-  balas=20;
- }
-
-}
-
-
-void spaceGun(int maximum) {                                      //------->Som do tiro
-for(int i = 0; i <maximum; i++) {
-digitalWrite (piezoPin, HIGH);
-delayMicroseconds (i);
-if(analogRead(A4)==0){
-        hit=1;
+        HC05.listen();
+        stat = HC05.read();
       }
-digitalWrite (piezoPin, LOW);
-delayMicroseconds (i);
+
+      delay(700);
+
+      TFTscreen.background(255,255,255);
+      TFTscreen.setCursor(27,55);
+      TFTscreen.setTextSize(3);
+      TFTscreen.setTextColor(0x0000);
+      TFTscreen.print("Wasted");
+
+      if(stat != 2){
+        HC05.listen();
+        if (HC05.available()>0) { 
+          HC05.listen();
+          stat = HC05.read();
+        }
+      }
+      delay(700);
+    }
+
+    stat=0;
+
+    // Update display after respawn
+    if(vidas==2){                       
+      TFTscreen.background(255,255,255);
+      TFTscreen.setCursor(2,20);
+      TFTscreen.setTextSize(2);
+      TFTscreen.setTextColor(0x0000);
+      TFTscreen.print("Balas - 20/20");
+      TFTscreen.setCursor(15,90);
+      TFTscreen.setTextSize(2);
+      TFTscreen.setTextColor(0x0000);
+      TFTscreen.print("Vidas - II");
+    }
+    else if(vidas==1){                  
+      TFTscreen.background(255,255,255);
+      TFTscreen.setCursor(2,20);
+      TFTscreen.setTextSize(2);
+      TFTscreen.setTextColor(0x0000);
+      TFTscreen.print("Balas - 20/20");
+      TFTscreen.setCursor(15,90);
+      TFTscreen.setTextSize(2);
+      TFTscreen.setTextColor(0x0000);
+      TFTscreen.print("Vidas - I");
+    }
+    hit=0;
+    balas=20;
+  }
 }
+
+// Play shot sound with piezo
+void spaceGun(int maximum) {    
+  for(int i = 0; i < maximum; i++) {
+    digitalWrite(piezoPin, HIGH);
+    delayMicroseconds(i);
+    if(analogRead(A4)==0){
+      hit=1;
+    }
+    digitalWrite(piezoPin, LOW);
+    delayMicroseconds(i);
+  }
 }
