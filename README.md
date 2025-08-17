@@ -60,16 +60,6 @@ Players have limited bullets and lives, while the Base allows **reload** and **r
 
 ---
 
-## 📌 Hardware
-- Arduino Uno/Nano (compatible)  
-- TFT display (CS: D10, DC: D9, RST: D8)  
-- HC-05 Bluetooth module (RX: D5, TX: D6)  
-- Push buttons (Base: D2, D3; Gun trigger: D3)  
-- IR/Laser emitter (D2) + IR receiver (A4)  
-- Piezo speaker (D7)  
-
----
-
 ## 📶 Bluetooth Setup (HC-05)
 
 1. **Wiring**  
@@ -99,14 +89,6 @@ Players have limited bullets and lives, while the Base allows **reload** and **r
 4. Upload `Pistola_Colete/` code to the Gun/Vest Arduino.  
 5. Connect wiring as described above.  
 6. Power on both modules and start playing!  
-
----
-
-## 📖 Notes
-- Buttons can be improved with `INPUT_PULLUP` and debounce.  
-- IR emission can be refined with 38kHz modulation for better realism.  
-- Constants for bullets/lives are easy to adjust in code.  
-- Recommended to add photos of wiring and setup for clarity.  
 
 ---
 
