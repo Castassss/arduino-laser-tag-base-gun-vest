@@ -1,0 +1,43 @@
+# ---- OS junk ----
+.DS_Store
+Thumbs.db
+Icon?
+*.lnk
+ehthumbs.db
+
+# ---- Editors/IDEs ----
+.vscode/
+.idea/
+*.code-workspace
+*.swp
+*.swo
+
+# ---- Arduino/C++ build artifacts ----
+*.hex
+*.elf
+*.bin
+*.eep
+*.map
+*.lst
+*.lss
+*.o
+*.d
+
+# ---- Build dirs (Arduino/AVR/CMake) ----
+build/
+cmake-build-*/
+.temp/
+arduino_build*/
+arduino_cache_*/
+
+# ---- PlatformIO (optional) ----
+.pio/
+.pioenvs/
+.piolibdeps/
+
+# ---- Logs ----
+*.log
+
+# (Optional) Local libraries
+# libraries/*
+# !libraries/README.md
