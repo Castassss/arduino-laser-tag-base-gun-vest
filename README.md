@@ -66,6 +66,29 @@ Players have limited bullets and lives, while the Base allows **reload** and **r
 
 ---
 
+## 📶 Bluetooth Setup (HC-05)
+
+1. **Wiring**  
+   - HC-05 VCC → 5V  
+   - HC-05 GND → GND  
+   - HC-05 TX → Arduino D5 (RX of SoftwareSerial)  
+   - HC-05 RX → Arduino D6 (TX of SoftwareSerial)  
+   *(⚠️ usa divisor de tensão no RX do HC-05 se necessário, pois ele trabalha a 3.3V)*  
+
+2. **Pairing**  
+   - Default name: `HC-05`  
+   - Default PIN: `1234` (ou `0000`)  
+   - Baud rate: `9600`  
+
+3. **Communication**  
+   - Base Station sends:  
+     - `1` → **Reload** command  
+     - `2` → **Respawn** command  
+   - Gun/Vest listens and reacts to commands.  
+
+
+---
+
 ## ▶️ How to Run
 1. Open Arduino IDE.  
 2. Install required libraries: `TFT.h`, `SPI.h`, `SoftwareSerial.h`.  
