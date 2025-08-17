@@ -16,6 +16,46 @@ Players have limited bullets and lives, while the Base allows **reload** and **r
 
 ---
 
+## 🔌 Wiring (Pin Map)
+
+### 📟 Base Station
+| Component           | Arduino Pin | Notes                  |
+|---------------------|-------------|------------------------|
+| TFT CS              | D10         | Chip Select            |
+| TFT DC              | D9          | Data/Command           |
+| TFT RST             | D8          | Reset                  |
+| Button (navigate)   | D3          | Move through menu      |
+| Button (select)     | D2          | Confirm option         |
+| HC-05 RX            | D5          | SoftwareSerial RX      |
+| HC-05 TX            | D6          | SoftwareSerial TX      |
+
+---
+
+### 🔫 Gun / Vest
+| Component           | Arduino Pin | Notes                  |
+|---------------------|-------------|------------------------|
+| TFT CS              | D10         | Chip Select            |
+| TFT DC              | D9          | Data/Command           |
+| TFT RST             | D8          | Reset                  |
+| Trigger Button      | D3          | Fire                   |
+| IR / Laser Emitter  | D2          | Send shot signal       |
+| IR Receiver         | A4          | Detect being hit       |
+| Piezo Buzzer        | D7          | Sound effect           |
+| HC-05 RX            | D5          | SoftwareSerial RX      |
+| HC-05 TX            | D6          | SoftwareSerial TX      |
+
+---
+
+## 📌 Hardware
+- Arduino Uno/Nano (compatible)  
+- TFT display (CS: D10, DC: D9, RST: D8)  
+- HC-05 Bluetooth module (RX: D5, TX: D6)  
+- Push buttons (Base: D2, D3; Gun trigger: D3)  
+- IR/Laser emitter (D2) + IR receiver (A4)  
+- Piezo speaker (D7)  
+
+---
+
 ## 📌 Hardware
 - Arduino Uno/Nano (compatible)  
 - TFT display (CS: D10, DC: D9, RST: D8)  
