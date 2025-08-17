@@ -10,7 +10,7 @@ Players have limited bullets and lives, while the Base allows **reload** and **r
 
 ---
 
-## 🔧 Features
+## Features
 - TFT display menus for user interaction  
 - Bullet and life counters on Gun/Vest  
 - Bluetooth (HC-05) communication between modules  
@@ -20,9 +20,9 @@ Players have limited bullets and lives, while the Base allows **reload** and **r
 
 ---
 
-## 🔌 Wiring (Pin Map)
+## Wiring (Pin Map)
 
-### 📟 Base Station
+### Base Station
 | Component           | Arduino Pin | Notes                  |
 |---------------------|-------------|------------------------|
 | TFT CS              | D10         | Chip Select            |
@@ -35,7 +35,7 @@ Players have limited bullets and lives, while the Base allows **reload** and **r
 
 ---
 
-### 🔫 Gun / Vest
+### Gun / Vest
 | Component           | Arduino Pin | Notes                  |
 |---------------------|-------------|------------------------|
 | TFT CS              | D10         | Chip Select            |
@@ -50,7 +50,7 @@ Players have limited bullets and lives, while the Base allows **reload** and **r
 
 ---
 
-## 📌 Hardware
+## Hardware
 - Arduino Uno/Nano (compatible)  
 - TFT display (CS: D10, DC: D9, RST: D8)  
 - HC-05 Bluetooth module (RX: D5, TX: D6)  
@@ -60,7 +60,7 @@ Players have limited bullets and lives, while the Base allows **reload** and **r
 
 ---
 
-## 📶 Bluetooth Setup (HC-05)
+## Bluetooth Setup (HC-05)
 
 1. **Wiring**  
    - HC-05 VCC → 5V  
@@ -82,7 +82,7 @@ Players have limited bullets and lives, while the Base allows **reload** and **r
 
 ---
 
-## ▶️ How to Run
+## How to Run
 1. Open Arduino IDE.  
 2. Install required libraries: `TFT.h`, `SPI.h`, `SoftwareSerial.h`.  
 3. Upload `Base/` code to the Base Arduino.  
@@ -94,5 +94,5 @@ Players have limited bullets and lives, while the Base allows **reload** and **r
 ---
 
 
-## 📜 License
+## License
 MIT License – free to use, learn, and adapt.
