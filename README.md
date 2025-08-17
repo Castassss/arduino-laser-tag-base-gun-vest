@@ -3,6 +3,14 @@ DIY Arduino Laser Tag system with two modules: **Base Station** and **Gun/Vest**
 The project uses **TFT displays**, **Bluetooth HC-05**, **piezo speaker**, and **IR/laser emitter** to simulate a simple tag game.  
 Players have limited bullets and lives, while the Base allows **reload** and **respawn**.
 
+
+
+## 🗂️ Project Structure
+Projeto_Final/
+ ├─ Base/             # Base station (menu + Bluetooth)
+ ├─ Pistola_Colete/   # Gun/Vest (bullets, lives, IR detection)
+ └─ README.md
+
 ---
 
 ## 🔧 Features
